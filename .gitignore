@@ -1,0 +1,13 @@
+# Dependencies
+/vendor/
+
+# Local environment configuration
+.env
+
+# Test cache
+/.phpunit.cache/
+
+# IDE / OS files
+.idea/
+.vscode/
+.DS_Store
