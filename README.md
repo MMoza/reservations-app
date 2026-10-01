@@ -205,11 +205,12 @@ Entrada no fiable = tratada como tal:
 composer test
 ```
 
-32 tests / 52 assertions, enfocados en lo que rompe cosas (poca cobertura con sentido frente a cobertura amplia sin valor):
+36 tests / 65 assertions, enfocados en lo que rompe cosas (poca cobertura con sentido frente a cobertura amplia sin valor):
 
 - **`ReservationStatusTest`** — matriz completa de transiciones (9 casos) + valores del enum.
 - **`ReservationValidatorTest`** — normalización, campos requeridos, email inválido, fechas pasadas/invertidas/imposibles (`2026-02-30`), importes inválidos, límite de notas.
 - **`ReservationServiceTest`** — con `FakeReservationRepository`: la creación escribe su evento; una transición rechazada (409) **no** cambia el estado ni escribe evento; 404/400; nada se persiste si la validación falla.
+- **`PdoReservationRepositoryTest`** — integración de solo lectura contra MySQL real (**se auto-omite** si no hay BD, para CI): búsqueda por huésped en nombre y email, combinación con estado, escapes de comodines `LIKE` y solape del rango de fechas.
 
 ---
 
