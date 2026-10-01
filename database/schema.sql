@@ -92,42 +92,42 @@ INSERT INTO reservation_event
     (reservation_id, event_type, description, created_at, updated_at)
 VALUES
     -- 1. Lucía Fernández (CONFIRMED)
-    (1, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 20 DAY, NOW() - INTERVAL 20 DAY),
-    (1, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 18 DAY, NOW() - INTERVAL 18 DAY),
+    (1, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 20 DAY, NOW() - INTERVAL 20 DAY),
+    (1, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 18 DAY, NOW() - INTERVAL 18 DAY),
     -- 2. Carlos Martínez (PENDING)
-    (2, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 5 DAY,  NOW() - INTERVAL 5 DAY),
+    (2, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 5 DAY,  NOW() - INTERVAL 5 DAY),
     -- 3. Marta Gómez (CANCELLED)
-    (3, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 30 DAY, NOW() - INTERVAL 30 DAY),
-    (3, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 28 DAY, NOW() - INTERVAL 28 DAY),
-    (3, 'STATUS_CHANGED', 'Status changed from CONFIRMED to CANCELLED',  NOW() - INTERVAL 6 DAY,  NOW() - INTERVAL 6 DAY),
+    (3, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 30 DAY, NOW() - INTERVAL 30 DAY),
+    (3, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 28 DAY, NOW() - INTERVAL 28 DAY),
+    (3, 'STATUS_CHANGED', 'Estado cambiado de CONFIRMED a CANCELLED',  NOW() - INTERVAL 6 DAY,  NOW() - INTERVAL 6 DAY),
     -- 4. Jorge López (CONFIRMED, past stay)
-    (4, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 45 DAY, NOW() - INTERVAL 45 DAY),
-    (4, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 44 DAY, NOW() - INTERVAL 44 DAY),
+    (4, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 45 DAY, NOW() - INTERVAL 45 DAY),
+    (4, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 44 DAY, NOW() - INTERVAL 44 DAY),
     -- 5. Ana Ruiz (CONFIRMED, past stay)
-    (5, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 25 DAY, NOW() - INTERVAL 25 DAY),
-    (5, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 24 DAY, NOW() - INTERVAL 24 DAY),
+    (5, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 25 DAY, NOW() - INTERVAL 25 DAY),
+    (5, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 24 DAY, NOW() - INTERVAL 24 DAY),
     -- 6. Pablo Sánchez (PENDING)
-    (6, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 2 DAY,  NOW() - INTERVAL 2 DAY),
+    (6, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 2 DAY,  NOW() - INTERVAL 2 DAY),
     -- 7. Elena Torres (CONFIRMED)
-    (7, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 12 DAY, NOW() - INTERVAL 12 DAY),
-    (7, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 11 DAY, NOW() - INTERVAL 11 DAY),
+    (7, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 12 DAY, NOW() - INTERVAL 12 DAY),
+    (7, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 11 DAY, NOW() - INTERVAL 11 DAY),
     -- 8. Diego Ramírez (CANCELLED)
-    (8, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 60 DAY, NOW() - INTERVAL 60 DAY),
-    (8, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',    NOW() - INTERVAL 59 DAY, NOW() - INTERVAL 59 DAY),
-    (8, 'STATUS_CHANGED', 'Status changed from CONFIRMED to CANCELLED',  NOW() - INTERVAL 52 DAY, NOW() - INTERVAL 52 DAY),
+    (8, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 60 DAY, NOW() - INTERVAL 60 DAY),
+    (8, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',    NOW() - INTERVAL 59 DAY, NOW() - INTERVAL 59 DAY),
+    (8, 'STATUS_CHANGED', 'Estado cambiado de CONFIRMED a CANCELLED',  NOW() - INTERVAL 52 DAY, NOW() - INTERVAL 52 DAY),
     -- 9. Sofía Navarro (PENDING)
-    (9, 'CREATED',        'Reservation created by guest',                NOW() - INTERVAL 8 DAY,  NOW() - INTERVAL 8 DAY),
+    (9, 'CREATED',        'Reserva creada por el huésped',                NOW() - INTERVAL 8 DAY,  NOW() - INTERVAL 8 DAY),
     -- 10. Antonio Vázquez (CONFIRMED, past stay)
-    (10, 'CREATED',        'Reservation created by guest',               NOW() - INTERVAL 75 DAY, NOW() - INTERVAL 75 DAY),
-    (10, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',   NOW() - INTERVAL 74 DAY, NOW() - INTERVAL 74 DAY),
+    (10, 'CREATED',        'Reserva creada por el huésped',               NOW() - INTERVAL 75 DAY, NOW() - INTERVAL 75 DAY),
+    (10, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',   NOW() - INTERVAL 74 DAY, NOW() - INTERVAL 74 DAY),
     -- 11. Carmen Delgado (PENDING)
-    (11, 'CREATED',        'Reservation created by guest',               NOW() - INTERVAL 4 DAY,  NOW() - INTERVAL 4 DAY),
+    (11, 'CREATED',        'Reserva creada por el huésped',               NOW() - INTERVAL 4 DAY,  NOW() - INTERVAL 4 DAY),
     -- 12. Iker Molina (CONFIRMED)
-    (12, 'CREATED',        'Reservation created by guest',               NOW() - INTERVAL 15 DAY, NOW() - INTERVAL 15 DAY),
-    (12, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',   NOW() - INTERVAL 14 DAY, NOW() - INTERVAL 14 DAY),
+    (12, 'CREATED',        'Reserva creada por el huésped',               NOW() - INTERVAL 15 DAY, NOW() - INTERVAL 15 DAY),
+    (12, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',   NOW() - INTERVAL 14 DAY, NOW() - INTERVAL 14 DAY),
     -- 13. Nuria Peña (CONFIRMED, past stay)
-    (13, 'CREATED',        'Reservation created by guest',               NOW() - INTERVAL 18 DAY, NOW() - INTERVAL 18 DAY),
-    (13, 'STATUS_CHANGED', 'Status changed from PENDING to CONFIRMED',   NOW() - INTERVAL 17 DAY, NOW() - INTERVAL 17 DAY),
+    (13, 'CREATED',        'Reserva creada por el huésped',               NOW() - INTERVAL 18 DAY, NOW() - INTERVAL 18 DAY),
+    (13, 'STATUS_CHANGED', 'Estado cambiado de PENDING a CONFIRMED',   NOW() - INTERVAL 17 DAY, NOW() - INTERVAL 17 DAY),
     -- 14. Rubén Ortega (CANCELLED)
-    (14, 'CREATED',        'Reservation created by guest',               NOW() - INTERVAL 10 DAY, NOW() - INTERVAL 10 DAY),
-    (14, 'STATUS_CHANGED', 'Status changed from CONFIRMED to CANCELLED', NOW() - INTERVAL 7 DAY,  NOW() - INTERVAL 7 DAY);
+    (14, 'CREATED',        'Reserva creada por el huésped',               NOW() - INTERVAL 10 DAY, NOW() - INTERVAL 10 DAY),
+    (14, 'STATUS_CHANGED', 'Estado cambiado de CONFIRMED a CANCELLED', NOW() - INTERVAL 7 DAY,  NOW() - INTERVAL 7 DAY);
