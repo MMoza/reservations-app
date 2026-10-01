@@ -167,10 +167,9 @@ final class Request
             $path = $pathInfo;
         } else {
             $uri = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
-            $path = preg_replace('#^.*?/api\.php#', '', $uri) ?? $uri;
-            if ($path === '' || $path === $uri && !str_contains($uri, 'api.php')) {
-                $path = $uri;
-            }
+            $path = str_contains($uri, 'api.php')
+                ? (string) preg_replace('#^.*?/api\.php#', '', $uri)
+                : $uri;
         }
 
         if ($path === '' || $path === '/') {

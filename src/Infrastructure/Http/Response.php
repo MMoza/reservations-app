@@ -10,12 +10,11 @@ namespace App\Infrastructure\Http;
 final class Response
 {
     /**
-     * @param array<string, mixed> $payload
      * @param array<string, string> $headers
      */
     private function __construct(
         private readonly int $statusCode,
-        private readonly array $payload,
+        private readonly array|string $payload,
         private readonly array $headers = [],
     ) {
     }
@@ -35,6 +34,14 @@ final class Response
     public static function jsonWithMeta(mixed $data, array $meta, int $statusCode = 200, array $headers = []): self
     {
         return new self($statusCode, ['data' => $data, 'meta' => $meta], $headers);
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    public static function html(string $html, int $statusCode = 200, array $headers = []): self
+    {
+        return new self($statusCode, $html, $headers);
     }
 
     /**
@@ -60,7 +67,8 @@ final class Response
     {
         http_response_code($this->statusCode);
 
-        header('Content-Type: application/json; charset=utf-8');
+        $isHtml = is_string($this->payload);
+        header('Content-Type: ' . ($isHtml ? 'text/html; charset=utf-8' : 'application/json; charset=utf-8'));
         header('X-Content-Type-Options: nosniff');
         header('Cache-Control: no-store');
 
@@ -68,6 +76,8 @@ final class Response
             header($name . ': ' . $value);
         }
 
-        echo json_encode($this->payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        echo $isHtml
+            ? $this->payload
+            : json_encode($this->payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }
