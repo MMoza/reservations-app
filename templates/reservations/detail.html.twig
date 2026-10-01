@@ -1,0 +1,97 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Reserva #{{ reservation.id }}{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Migas de pan">
+    <a href="/">← Volver al listado</a>
+</nav>
+
+<header class="page-header page-header--row">
+    <h1>Reserva #{{ reservation.id }}</h1>
+    <span class="badge badge--{{ reservation.status.value|lower }}" id="reservation-status-badge">
+        {{ reservation.status.label }}
+    </span>
+</header>
+
+{# Status messages (loading / success / error) announced to screen readers #}
+<div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+
+<section class="page-section" aria-labelledby="detail-title">
+    <h2 id="detail-title" class="sr-only">Datos de la reserva</h2>
+
+    <dl class="detail-grid">
+        <div class="detail-grid__item">
+            <dt>Huésped</dt>
+            <dd>{{ reservation.guestName }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Email</dt>
+            <dd><a href="mailto:{{ reservation.guestEmail }}">{{ reservation.guestEmail }}</a></dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Alojamiento</dt>
+            <dd>{{ reservation.accommodationName }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Fecha de entrada</dt>
+            <dd>{{ reservation.checkInDate|date('d/m/Y') }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Fecha de salida</dt>
+            <dd>{{ reservation.checkOutDate|date('d/m/Y') }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Importe</dt>
+            <dd>{{ reservation.amount|number_format(2, ',', '.') }} €</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Notas</dt>
+            <dd>{{ reservation.notes is not empty ? reservation.notes : '—' }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Creada</dt>
+            <dd>{{ reservation.createdAt|date('d/m/Y H:i') }}</dd>
+        </div>
+        <div class="detail-grid__item">
+            <dt>Última actualización</dt>
+            <dd>{{ reservation.updatedAt|date('d/m/Y H:i') }}</dd>
+        </div>
+    </dl>
+
+    <div class="detail-actions" id="detail-actions"
+         data-reservation-id="{{ reservation.id }}"
+         data-status="{{ reservation.status.value }}">
+        {% if reservation.status.value != 'CANCELLED' %}
+            {% if reservation.status.value == 'PENDING' %}
+                <button type="button" class="btn btn--primary js-change-status" data-status="CONFIRMED">
+                    Confirmar reserva
+                </button>
+            {% endif %}
+            <button type="button" class="btn btn--danger js-change-status" data-status="CANCELLED">
+                Cancelar reserva
+            </button>
+        {% endif %}
+    </div>
+</section>
+
+<section class="page-section" aria-labelledby="timeline-title">
+    <h2 id="timeline-title">Historial de eventos</h2>
+
+    {% set typeLabels = {CREATED: 'Creación', STATUS_CHANGED: 'Cambio de estado'} %}
+
+    <ol class="timeline" id="events-timeline">
+        {% for event in events %}
+            <li class="timeline__item">
+                <span class="timeline__type">{{ typeLabels[event.type.value] ?? event.type.value }}</span>
+                <p class="timeline__description">{{ event.description }}</p>
+                <time class="timeline__date" datetime="{{ event.createdAt|date('Y-m-d\\TH:i:s') }}">
+                    {{ event.createdAt|date('d/m/Y H:i') }}
+                </time>
+            </li>
+        {% else %}
+            <li class="timeline__item">No hay eventos registrados para esta reserva.</li>
+        {% endfor %}
+    </ol>
+</section>
+{% endblock %}

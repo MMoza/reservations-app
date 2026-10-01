@@ -1,0 +1,28 @@
+{# Single row of the reservations table (initial server-side render).
+   The JavaScript rebuilds exactly this markup when filters change. #}
+<tr data-reservation-id="{{ reservation.id }}" data-status="{{ reservation.status.value }}">
+    <td>{{ reservation.id }}</td>
+    <td>
+        <strong>{{ reservation.guestName }}</strong>
+        <br><a class="muted small" href="mailto:{{ reservation.guestEmail }}">{{ reservation.guestEmail }}</a>
+    </td>
+    <td>{{ reservation.accommodationName }}</td>
+    <td>{{ reservation.checkInDate|date('d/m/Y') }}</td>
+    <td>{{ reservation.checkOutDate|date('d/m/Y') }}</td>
+    <td>
+        <span class="badge badge--{{ reservation.status.value|lower }}">
+            {{ reservation.status.label }}
+        </span>
+    </td>
+    <td class="num">{{ reservation.amount|number_format(2, ',', '.') }} €</td>
+    <td class="actions-cell">
+        <a class="btn btn--small" href="/reservations/{{ reservation.id }}">Ver detalle</a>
+        {% if reservation.status.value != 'CANCELLED' %}
+            <button type="button"
+                    class="btn btn--small btn--danger js-cancel-reservation"
+                    data-reservation-id="{{ reservation.id }}">
+                Cancelar
+            </button>
+        {% endif %}
+    </td>
+</tr>

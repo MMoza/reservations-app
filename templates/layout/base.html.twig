@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Reservas{% endblock %} · MisterPlan</title>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+<header class="site-header">
+    <div class="container site-header__inner">
+        <a class="brand" href="/">MisterPlan <span aria-hidden="true">·</span> Reservas</a>
+        <nav class="site-nav" aria-label="Principal">
+            <a href="/">Listado</a>
+            <a href="/#new-reservation">Nueva reserva</a>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content" class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>Prueba técnica — Gestión de reservas de alojamiento</p>
+    </div>
+</footer>
+
+<script type="module" src="/assets/js/main.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

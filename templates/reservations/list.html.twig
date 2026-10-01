@@ -1,0 +1,131 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Listado de reservas{% endblock %}
+
+{% block content %}
+<section class="page-section" aria-labelledby="list-title">
+    <header class="page-header">
+        <h1 id="list-title">Reservas de alojamiento</h1>
+        <p class="page-subtitle"><span id="total-count">{{ meta.total }}</span> reservas encontradas</p>
+    </header>
+
+    {# Status messages (loading / success / error) announced to screen readers #}
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+
+    <form id="filters-form" class="filters" method="get" action="/">
+        <div class="filters__grid">
+            <div class="field">
+                <label for="filter-status">Estado</label>
+                <select id="filter-status" name="status">
+                    <option value="">Todos</option>
+                    <option value="PENDING" {% if filters.status == 'PENDING' %}selected{% endif %}>Pendiente</option>
+                    <option value="CONFIRMED" {% if filters.status == 'CONFIRMED' %}selected{% endif %}>Confirmada</option>
+                    <option value="CANCELLED" {% if filters.status == 'CANCELLED' %}selected{% endif %}>Cancelada</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="filter-from">Entrada desde</label>
+                <input type="date" id="filter-from" name="from" value="{{ filters.from }}">
+            </div>
+            <div class="field">
+                <label for="filter-to">Entrada hasta</label>
+                <input type="date" id="filter-to" name="to" value="{{ filters.to }}">
+            </div>
+            <div class="field field--grow">
+                <label for="filter-guest">Huésped</label>
+                <input type="search" id="filter-guest" name="guest" value="{{ filters.guest }}"
+                       placeholder="Nombre o email" autocomplete="off">
+            </div>
+            <div class="field field--actions">
+                <button type="submit" class="btn btn--primary">Filtrar</button>
+                <button type="button" class="btn" id="filters-reset">Limpiar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-wrapper">
+        <table class="data-table" id="reservations-table">
+            <caption class="sr-only">Listado de reservas con sus filtros activos</caption>
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Huésped</th>
+                <th scope="col">Alojamiento</th>
+                <th scope="col">Entrada</th>
+                <th scope="col">Salida</th>
+                <th scope="col">Estado</th>
+                <th scope="col" class="num">Importe</th>
+                <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="reservation-rows">
+            {% for reservation in reservations %}
+                {% include 'reservations/_row.html.twig' %}
+            {% else %}
+                <tr class="empty-row">
+                    <td colspan="8">No hay reservas que coincidan con los filtros.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <nav class="pagination" id="pagination" aria-label="Paginación"
+         {% if meta.totalPages <= 1 %}hidden{% endif %}>
+        <button type="button" class="btn" id="page-prev" {% if meta.page <= 1 %}disabled{% endif %}>Anterior</button>
+        <span id="page-info">Página {{ meta.page }} de {{ meta.totalPages }}</span>
+        <button type="button" class="btn" id="page-next" {% if meta.page >= meta.totalPages %}disabled{% endif %}>Siguiente</button>
+    </nav>
+</section>
+
+<section class="page-section" id="new-reservation" aria-labelledby="new-reservation-title">
+    <header class="page-header">
+        <h2 id="new-reservation-title">Nueva reserva</h2>
+    </header>
+
+    <form id="reservation-form" class="reservation-form" novalidate>
+        <div class="form-grid">
+            <div class="field">
+                <label for="guest_name">Nombre del huésped <span class="required">*</span></label>
+                <input type="text" id="guest_name" name="guest_name" maxlength="120" required>
+                <p class="field-error" id="error-guest_name" hidden></p>
+            </div>
+            <div class="field">
+                <label for="guest_email">Email <span class="required">*</span></label>
+                <input type="email" id="guest_email" name="guest_email" maxlength="180" required>
+                <p class="field-error" id="error-guest_email" hidden></p>
+            </div>
+            <div class="field">
+                <label for="accommodation_name">Alojamiento <span class="required">*</span></label>
+                <input type="text" id="accommodation_name" name="accommodation_name" maxlength="120" required>
+                <p class="field-error" id="error-accommodation_name" hidden></p>
+            </div>
+            <div class="field">
+                <label for="amount">Importe (€) <span class="required">*</span></label>
+                <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="480.00" required>
+                <p class="field-error" id="error-amount" hidden></p>
+            </div>
+            <div class="field">
+                <label for="check_in_date">Fecha de entrada <span class="required">*</span></label>
+                <input type="date" id="check_in_date" name="check_in_date" required>
+                <p class="field-error" id="error-check_in_date" hidden></p>
+            </div>
+            <div class="field">
+                <label for="check_out_date">Fecha de salida <span class="required">*</span></label>
+                <input type="date" id="check_out_date" name="check_out_date" required>
+                <p class="field-error" id="error-check_out_date" hidden></p>
+            </div>
+            <div class="field field--full">
+                <label for="notes">Notas</label>
+                <textarea id="notes" name="notes" rows="3" maxlength="1000"
+                          placeholder="Información adicional (opcional)"></textarea>
+                <p class="field-error" id="error-notes" hidden></p>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="submit-reservation">Crear reserva</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
