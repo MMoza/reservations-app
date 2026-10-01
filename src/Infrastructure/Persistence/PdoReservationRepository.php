@@ -70,8 +70,12 @@ final class PdoReservationRepository implements ReservationRepositoryInterface
         }
 
         if ($query->guest !== null) {
-            $conditions[] = '(guest_name LIKE :guest OR guest_email LIKE :guest)';
-            $parameters['guest'] = '%' . addcslashes($query->guest, '%_\\') . '%';
+            // Native prepares do not accept a repeated placeholder (:guest
+            // twice → HY093), so name/email search use one param each.
+            $guestPattern = '%' . addcslashes($query->guest, '%_\\') . '%';
+            $conditions[] = '(guest_name LIKE :guest_name OR guest_email LIKE :guest_email)';
+            $parameters['guest_name'] = $guestPattern;
+            $parameters['guest_email'] = $guestPattern;
         }
 
         $where = $conditions === [] ? '' : 'WHERE ' . implode(' AND ', $conditions);
