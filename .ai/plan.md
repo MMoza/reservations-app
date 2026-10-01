@@ -33,7 +33,7 @@ reservations-app/
 │   ├── Domain/
 │   │   ├── Model/Reservation.php          # entidad + reglas de transición de estado
 │   │   ├── Model/ReservationEvent.php
-│   │   ├── Enum/ReservationStatus.php     # pending | confirmed | cancelled
+│   │   ├── Enum/ReservationStatus.php     # PENDING | CONFIRMED | CANCELLED
 │   │   └── Exception/…                    # DomainException, ReservationNotFound…
 │   ├── Application/
 │   │   ├── ReservationService.php         # casos de uso: list/detail/create/changeStatus
@@ -58,13 +58,16 @@ reservations-app/
 ```
 
 **Naming:** todo en inglés, sin ambigüedades — `Reservation`, `ReservationStatus`, `ReservationService`, `changeStatus()`, `findByFilters()`, `recordEvent()`…
+Aplica también a la BD: columnas en inglés (`guest_name`, `check_in_date`…), valores del enum en MAYÚSCULAS (`PENDING`, `CONFIRMED`, `CANCELLED`) y `created_at`/`updated_at` en todas las tablas.
 
 ---
 
 ## 2. Base de datos (`database/schema.sql`)
 
-- `reservation`: los 10 campos del enunciado; `estado` como ENUM o VARCHAR con CHECK (`pending|confirmed|cancelled`); índices en `estado`, `fecha_entrada`, `fecha_salida`, `email_huesped`; `fecha_creacion` DEFAULT CURRENT_TIMESTAMP.
-- `reservation_event`: `id, reservation_id (FK ON DELETE CASCADE), tipo, descripcion, fecha_creacion` + índice por `reservation_event.reservation_id`.
+**Convención de nombres (decidida):** todo en inglés, snake_case, y valores del enum en MAYÚSCULAS. Todas las tablas llevan `created_at` y `updated_at` para integridad.
+
+- `reservation`: `id, guest_name, guest_email, accommodation_name, check_in_date, check_out_date, status ENUM('PENDING','CONFIRMED','CANCELLED'), amount, notes, created_at, updated_at`; índices en `status`, `check_in_date`, `check_out_date`, `guest_email`; CHECK de coherencia de fechas y de `amount >= 0`.
+- `reservation_event`: `id, reservation_id (FK ON DELETE CASCADE), event_type ENUM('CREATED','STATUS_CHANGED'), description, created_at, updated_at` + índice por `reservation_id`.
 - **~12–15 INSERTs realistas**: mezcla de estados, rangos de fechas variados (pasadas/futuras), nombres y alojamientos españoles variados, importes distintos, alguna con notas, y eventos de historial coherentes con los cambios de estado.
 - Incluye `DROP TABLE IF EXISTS` al inicio para que el import sea repetible.
 
@@ -85,12 +88,12 @@ reservations-app/
 - Respuesta estándar: `{"data": …}` y, en error, `{"error": {"code": …, "message": …, "fields": {…}}}`.
 
 **Validación en servidor** (`ReservationValidator`, errores estructurados por campo):
-- `nombre_huesped`, `nombre_alojamiento`: obligatorios, longitud 2–120, trim.
-- `email_huesped`: `FILTER_VALIDATE_EMAIL`.
-- `fecha_entrada`/`fecha_salida`: formato ISO (`Y-m-d`), `fecha_salida > fecha_entrada`, `fecha_entrada` no en el pasado.
-- `estado`: sólo valores del enum whitelist.
-- `importe`: numérico ≥ 0, ≤ 2 decimales.
-- `notas`: opcional, longitud máx. (p. ej. 1000).
+- `guest_name`, `accommodation_name`: obligatorios, longitud 2–120, trim.
+- `guest_email`: `FILTER_VALIDATE_EMAIL`.
+- `check_in_date`/`check_out_date`: formato ISO (`Y-m-d`), `check_out_date > check_in_date`, `check_in_date` no en el pasado.
+- `status`: sólo valores del enum whitelist (`PENDING|CONFIRMED|CANCELLED`).
+- `amount`: numérico ≥ 0, ≤ 2 decimales.
+- `notes`: opcional, longitud máx. (p. ej. 1000).
 
 **Seguridad (lo que revisan a fondo):**
 - PDO con **prepared statements** en todas las queries (nada de concatenar SQL); campos de orden/filtro whitelist, nunca interpolados.
@@ -115,7 +118,7 @@ reservations-app/
 - `templates/layout/base.html.twig` con bloques `{% block title %}`, `{% block stylesheets %}`, `{% block content %}`, `{% block javascripts %}` — las dos vistas hacen `{% extends %}`.
 - **Listado**: filtros (select estado, fechas, texto), tabla con badges de estado, botón cancelar, paginación.
 - **Detalle**: ficha de la reserva + **timeline** de `reservation_event`.
-- Formato en plantilla donde tiene sentido: `{{ reservation.fechaEntrada|date('d/m/Y') }}`, `{{ importe|number_format(2, ',', '.') }} €`. Autoescape activo; sin `|raw`.
+- Formato en plantilla donde tiene sentido: `{{ reservation.checkInDate|date('d/m/Y') }}`, `{{ amount|number_format(2, ',', '.') }} €`. Autoescape activo; sin `|raw`.
 
 ---
 
