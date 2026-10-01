@@ -63,9 +63,14 @@ final class PdoReservationRepositoryTest extends TestCase
         ]));
 
         self::assertGreaterThanOrEqual(1, $page->total);
+
+        $wrongStatus = [];
         foreach ($page->items as $reservation) {
-            self::assertSame(ReservationStatus::Confirmed, $reservation->status());
+            if ($reservation->status() !== ReservationStatus::Confirmed) {
+                $wrongStatus[] = $reservation->id();
+            }
         }
+        self::assertSame([], $wrongStatus, 'Solo pueden devolverse reservas CONFIRMED.');
     }
 
     public function testLikeWildcardsInGuestAreEscaped(): void
@@ -90,9 +95,23 @@ final class PdoReservationRepositoryTest extends TestCase
         $ids = array_map(static fn (Reservation $reservation): int => $reservation->id(), $page->items);
         self::assertContains($probe->id(), $ids, 'La reserva de referencia solapa su propio rango.');
 
+        // Violations are aggregated so the assertion count stays fixed
+        // regardless of how many reservations the seed (or a user) contains.
+        $violations = [];
         foreach ($page->items as $reservation) {
-            self::assertGreaterThanOrEqual($from, $reservation->checkOutDate()->format('Y-m-d'));
-            self::assertLessThanOrEqual($to, $reservation->checkInDate()->format('Y-m-d'));
+            $checkIn = $reservation->checkInDate()->format('Y-m-d');
+            $checkOut = $reservation->checkOutDate()->format('Y-m-d');
+            if ($checkOut < $from || $checkIn > $to) {
+                $violations[] = sprintf(
+                    'id=%d [%s -> %s] no solapa con el rango [%s -> %s]',
+                    $reservation->id(),
+                    $checkIn,
+                    $checkOut,
+                    $from,
+                    $to,
+                );
+            }
         }
+        self::assertSame([], $violations, 'El filtro de fechas solo debe devolver estancias que solapen el rango.');
     }
 }

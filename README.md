@@ -4,7 +4,7 @@ Aplicación de gestión de reservas construida **sin framework**: API en PHP 8.3
 
 > **Arquitectura**: capas hexagonal-*lite* en 4 niveles con **un único puerto** (`ReservationRepositoryInterface`) — el dominio no depende de nada y la persistencia se sustituye o se testea sin tocar una línea de lógica de negocio. La sección [Arquitectura](#arquitectura) es el corazón de este README.
 >
-> **Estado**: 36 tests / 65 assertions en verde · API y vistas verificadas end-to-end contra MySQL real.
+> **Estado**: 36 tests / 62 assertions en verde · API y vistas verificadas end-to-end contra MySQL real.
 
 > **Despliegue:** _pendiente de publicación — esta sección se actualizará con la URL pública en cuanto la app esté desplegada._
 
@@ -426,7 +426,7 @@ Entrada no fiable = tratada como tal:
 composer test
 ```
 
-**36 tests / 65 assertions**, organizados como una pirámide anclada a la arquitectura — cada nivel testea exactamente lo que su capa promete:
+**36 tests / 62 assertions**, organizados como una pirámide anclada a la arquitectura — cada nivel testea exactamente lo que su capa promete:
 
 | Nivel | Fichero | Qué cubre | ¿Necesita BD? |
 |---|---|---|---|
@@ -436,6 +436,8 @@ composer test
 | Infrastructure | `PdoReservationRepositoryTest` (**integración de solo lectura**) | Búsqueda por huésped en nombre y email, combinación con estado, escapes de comodines `LIKE`, solape del rango de fechas. **Se auto-omite** si no hay BD (CI sin MySQL) | Sí |
 
 Los tests de dominio y aplicación corren **sin instanciar PDO ni MySQL**, y la suite completa (incluida la integración) se ejecuta en **0,04 s** según la salida de PHPUnit: la arquitectura aísla la lógica de la base de datos.
+
+> El recuento de assertions es **estable por diseño**: las comprobaciones fila a fila se agregan en una sola assertion, así que no cambia aunque la BD crezca (verificado añadiendo una reserva creada desde la UI al seed de 14).
 
 ---
 
