@@ -6,6 +6,7 @@
 
 # Test cache
 /.phpunit.cache/
+.phpunit.result.cache
 
 # IDE / OS files
 .idea/
